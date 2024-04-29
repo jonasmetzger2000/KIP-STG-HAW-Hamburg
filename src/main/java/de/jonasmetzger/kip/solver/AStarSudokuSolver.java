@@ -1,42 +1,42 @@
 package de.jonasmetzger.kip.solver;
 
-import de.jonasmetzger.kip.sudoku.Board;
+import de.jonasmetzger.kip.sudoku.BoardArray;
 
 import java.util.*;
 
 public abstract class AStarSudokuSolver {
 
-    private final PriorityQueue<Board> boards = new PriorityQueue<>(Comparator.comparingInt(this::heuristic).reversed());
+    private final PriorityQueue<Map.Entry<Integer, BoardArray>> boards = new PriorityQueue<>(Comparator.comparingInt(Map.Entry::getKey));
 
-    protected AStarSudokuSolver(Board board) {
-        boards.add(board);
+    protected AStarSudokuSolver(BoardArray board) {
+        boards.add(Map.entry(1, board));
     }
 
-    public Board solve() {
-        Board board = null;
-        while (!boards.isEmpty() && !boards.peek().solved()) {
-            board = boards.poll();
-            final List<Board> nextBoards = nextMoves(board);
-            boards.addAll(nextBoards);
+    public BoardArray solve() {
+        BoardArray board = null;
+        while (!boards.isEmpty() && !boards.peek().getValue().solved()) {
+            board = Objects.requireNonNull(boards.poll()).getValue();
+            final Map<Integer, BoardArray> nextBoards = nextMoves(board);
+            boards.addAll(nextBoards.entrySet());
         }
-        return boards.poll();
+        return Objects.requireNonNull(boards.poll()).getValue();
     }
 
-    protected List<Board> nextMoves(Board board) {
-        final List<Board> nextPossibleBoards = new ArrayList<>();
+    protected Map<Integer, BoardArray> nextMoves(BoardArray board) {
+        final Map<Integer, BoardArray> nextPossibleBoards = new TreeMap<>(Comparator.comparingInt(value -> value));
         for (int y = 0; y < 9; y++) {
             for (int x = 0; x < 9; x++) {
                 final List<Integer> possibleNums = board.numsForCell(x, y);
-                for (Integer num : possibleNums) {
-                    final Board newBoard = board.clone();
-                    newBoard.set(num, x, y);
-                    nextPossibleBoards.add(newBoard);
+                if (possibleNums.size() == 1) {
+                    final BoardArray newBoard = board.clone();
+                    newBoard.set(possibleNums.getFirst(), x, y);
+                    nextPossibleBoards.put(heuristic(board, x, y, possibleNums), newBoard);
                 }
             }
         }
         return nextPossibleBoards;
     }
 
-    protected abstract int heuristic(Board board);
+    protected abstract int heuristic(BoardArray board, int x, int y, List<Integer> possibleNums);
 
 }

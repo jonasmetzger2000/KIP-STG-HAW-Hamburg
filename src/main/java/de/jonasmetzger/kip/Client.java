@@ -1,40 +1,32 @@
 package de.jonasmetzger.kip;
 
 import de.jonasmetzger.kip.solver.AStarSudokuSolver;
-import de.jonasmetzger.kip.sudoku.Board;
+import de.jonasmetzger.kip.sudoku.BoardArray;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Objects;
 
 public class Client {
 
     public static void main(String[] args) {
         String puzzle = load("sodoku2.txt");
-        AStarSudokuSolver solver = new AStarSudokuSolver(Board.from(puzzle)) {
+        AStarSudokuSolver solver = new AStarSudokuSolver(BoardArray.from(puzzle)) {
             @Override
-            protected int heuristic(Board board) {
-                if (board.solved()) return Integer.MAX_VALUE;
-                else return board.countSetFields();
+            protected int heuristic(BoardArray board, int x, int y, List<Integer> possibleNums) {
+                return possibleNums.size();
             }
         };
 
-        Board solved = solver.solve();
+        BoardArray solved = solver.solve();
         System.out.println(solved);
-//        String puzzle = load("sodoku1.txt");
-//
-//        Board board = Board.from(puzzle);
-//
-//        System.out.println(puzzle);
-//        System.out.println("###");
-//        System.out.println(board);
-//        System.out.println(board.toString().equals(puzzle));
     }
 
-    static Board setBoard() {
-        Board board = new Board();
+    static BoardArray setBoard() {
+        BoardArray board = new BoardArray();
 
         board.set(6, 0, 0);
         board.set(3, 1, 0);

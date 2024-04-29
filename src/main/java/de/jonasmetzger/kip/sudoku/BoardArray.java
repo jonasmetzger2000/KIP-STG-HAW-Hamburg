@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.BitSet;
 import java.util.List;
 
-public class Board {
+public class BoardArray {
 
     int[][] grid;
     BitSet[] rowConstraints;
@@ -16,7 +16,7 @@ public class Board {
     static final BitSet EMPTY_MASK = new BitSet(9);
     static final BitSet FULL_MASK = new BitSet(9);
 
-    public Board() {
+    public BoardArray() {
         grid = new int[9][9];
         rowConstraints = new BitSet[10];
         colConstraints = new BitSet[10];
@@ -35,7 +35,7 @@ public class Board {
         setFields = 0;
     }
 
-    private Board(int[][] grid, BitSet[] rowConstraints, BitSet[] colConstraints, BitSet[][] bloConstraints, int setFields) {
+    private BoardArray(int[][] grid, BitSet[] rowConstraints, BitSet[] colConstraints, BitSet[][] bloConstraints, int setFields) {
         this.grid = grid;
         this.rowConstraints = rowConstraints;
         this.colConstraints = colConstraints;
@@ -44,7 +44,7 @@ public class Board {
     }
 
     @Override
-    public Board clone() {
+    public BoardArray clone() {
         final int[][] grid = new int[9][9];
         final BitSet[] rowConstraints = new BitSet[9];
         final BitSet[] colConstraints = new BitSet[9];
@@ -57,25 +57,25 @@ public class Board {
             rowConstraints[i] = (BitSet) this.rowConstraints[i].clone();
         }
         for (int i = 0; i < grid.length; i++) {
-            colConstraints[i] = (BitSet) this.rowConstraints[i].clone();
+            colConstraints[i] = (BitSet) this.colConstraints[i].clone();
         }
         for (int i = 0; i < 3; i++) {
             bloConstraints[i] = new BitSet[] {(BitSet) this.bloConstraints[i][0].clone(), (BitSet) this.bloConstraints[i][1].clone(), (BitSet) this.bloConstraints[i][2].clone() };
         }
-        return new Board(grid, rowConstraints, colConstraints.clone(), bloConstraints.clone(), setFields);
+        return new BoardArray(grid, rowConstraints, colConstraints.clone(), bloConstraints.clone(), setFields);
     }
 
     public boolean set(int value, int x, int y) {
-        BitSet mask = new BitSet(9);
-        mask.set(value-1);
+        BitSet mask = new BitSet(10);
+        mask.set(value);
         if (!rowConstraints[x].intersects(mask)) {
             if (!colConstraints[y].intersects(mask)) {
                 int blockX = x / 3;
                 int blockY = y / 3;
                 if (!bloConstraints[blockX][blockY].intersects(mask)) {
-                    rowConstraints[x].set(value-1);
-                    colConstraints[y].set(value-1);
-                    bloConstraints[blockX][blockY].set(value-1);
+                    rowConstraints[x].set(value);
+                    colConstraints[y].set(value);
+                    bloConstraints[blockX][blockY].set(value);
                     grid[x][y] = value;
                     setFields++;
                 }
@@ -91,13 +91,14 @@ public class Board {
         final BitSet colConstraint = colConstraints[y];
         final BitSet blockConstraint = bloConstraints[x/3][y/3];
 
-        final BitSet mask = EMPTY_MASK;
+        final BitSet mask = new BitSet(10);
         mask.or(rowConstraint);
         mask.or(colConstraint);
         mask.or(blockConstraint);
-        mask.flip(0, 9);
+        mask.flip(0, 10);
 
-        return mask.stream().map(operand -> operand+1).boxed().toList();
+        final List<Integer> numOptions = mask.stream().filter(value -> value != 0).boxed().toList();
+        return numOptions;
     }
 
     public boolean solved() {
@@ -121,7 +122,7 @@ public class Board {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
-        Board other = (Board) obj;
+        BoardArray other = (BoardArray) obj;
         return Arrays.deepEquals(this.grid, other.grid);
     }
 
@@ -146,8 +147,8 @@ public class Board {
         return sb.toString().trim();
     }
 
-    public static Board from(String string) {
-        final Board board = new Board();
+    public static BoardArray from(String string) {
+        final BoardArray board = new BoardArray();
         int x = 0;
         int y = 0;
 

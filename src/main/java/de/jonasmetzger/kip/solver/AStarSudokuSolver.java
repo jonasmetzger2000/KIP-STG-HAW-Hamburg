@@ -13,7 +13,7 @@ public abstract class AStarSudokuSolver {
     }
 
     public BoardArray solve() {
-        BoardArray board = null;
+        BoardArray board;
         while (!boards.isEmpty() && !boards.peek().getValue().solved()) {
             board = Objects.requireNonNull(boards.poll()).getValue();
             final Map<Integer, BoardArray> nextBoards = nextMoves(board);

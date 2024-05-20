@@ -8,9 +8,9 @@ import java.util.List;
 public class BoardArray {
 
     int[][] grid;
-    BitSet[] rowConstraints;
-    BitSet[] colConstraints;
-    BitSet[][] bloConstraints;
+    BitSet[] verticalConstraints;
+    BitSet[] horizontalConstraints;
+    BitSet[][] blockConstraints;
     int setFields;
 
     static final BitSet EMPTY_MASK = new BitSet(9);
@@ -18,28 +18,28 @@ public class BoardArray {
 
     public BoardArray() {
         grid = new int[9][9];
-        rowConstraints = new BitSet[10];
-        colConstraints = new BitSet[10];
-        bloConstraints = new BitSet[3][3];
+        verticalConstraints = new BitSet[10];
+        horizontalConstraints = new BitSet[10];
+        blockConstraints = new BitSet[3][3];
         setFields = 0;
         for (int i = 0; i < 9; i++) {
-            this.rowConstraints[i] = new BitSet();
+            this.verticalConstraints[i] = new BitSet();
         }
         for (int i = 0; i < 9; i++) {
-            this.colConstraints[i] = new BitSet();
+            this.horizontalConstraints[i] = new BitSet();
         }
         for (int i = 0; i < 3; i++) {
-            this.bloConstraints[i] = new BitSet[] { new BitSet(), new BitSet(), new BitSet() };
+            this.blockConstraints[i] = new BitSet[] { new BitSet(), new BitSet(), new BitSet() };
         }
         FULL_MASK.set(0, 9);
         setFields = 0;
     }
 
-    private BoardArray(int[][] grid, BitSet[] rowConstraints, BitSet[] colConstraints, BitSet[][] bloConstraints, int setFields) {
+    private BoardArray(int[][] grid, BitSet[] verticalConstraints, BitSet[] horizontalConstraints, BitSet[][] blockConstraints, int setFields) {
         this.grid = grid;
-        this.rowConstraints = rowConstraints;
-        this.colConstraints = colConstraints;
-        this.bloConstraints = bloConstraints;
+        this.verticalConstraints = verticalConstraints;
+        this.horizontalConstraints = horizontalConstraints;
+        this.blockConstraints = blockConstraints;
         this.setFields = setFields;
     }
 
@@ -49,18 +49,17 @@ public class BoardArray {
         final BitSet[] rowConstraints = new BitSet[9];
         final BitSet[] colConstraints = new BitSet[9];
         final BitSet[][] bloConstraints = new BitSet[3][3];
-
         for (int i = 0; i < grid.length; i++) {
             grid[i] = this.grid[i].clone();
         }
         for (int i = 0; i < grid.length; i++) {
-            rowConstraints[i] = (BitSet) this.rowConstraints[i].clone();
+            rowConstraints[i] = (BitSet) this.verticalConstraints[i].clone();
         }
         for (int i = 0; i < grid.length; i++) {
-            colConstraints[i] = (BitSet) this.colConstraints[i].clone();
+            colConstraints[i] = (BitSet) this.horizontalConstraints[i].clone();
         }
         for (int i = 0; i < 3; i++) {
-            bloConstraints[i] = new BitSet[] {(BitSet) this.bloConstraints[i][0].clone(), (BitSet) this.bloConstraints[i][1].clone(), (BitSet) this.bloConstraints[i][2].clone() };
+            bloConstraints[i] = new BitSet[] {(BitSet) this.blockConstraints[i][0].clone(), (BitSet) this.blockConstraints[i][1].clone(), (BitSet) this.blockConstraints[i][2].clone() };
         }
         return new BoardArray(grid, rowConstraints, colConstraints.clone(), bloConstraints.clone(), setFields);
     }
@@ -68,14 +67,14 @@ public class BoardArray {
     public boolean set(int value, int x, int y) {
         BitSet mask = new BitSet(10);
         mask.set(value);
-        if (!rowConstraints[x].intersects(mask)) {
-            if (!colConstraints[y].intersects(mask)) {
+        if (!verticalConstraints[x].intersects(mask)) {
+            if (!horizontalConstraints[y].intersects(mask)) {
                 int blockX = x / 3;
                 int blockY = y / 3;
-                if (!bloConstraints[blockX][blockY].intersects(mask)) {
-                    rowConstraints[x].set(value);
-                    colConstraints[y].set(value);
-                    bloConstraints[blockX][blockY].set(value);
+                if (!blockConstraints[blockX][blockY].intersects(mask)) {
+                    verticalConstraints[x].set(value);
+                    horizontalConstraints[y].set(value);
+                    blockConstraints[blockX][blockY].set(value);
                     grid[x][y] = value;
                     setFields++;
                 }
@@ -87,9 +86,9 @@ public class BoardArray {
     public List<Integer> numsForCell(int x, int y) {
         if (get(x, y) != 0) return new ArrayList<>();
 
-        final BitSet rowConstraint = rowConstraints[x];
-        final BitSet colConstraint = colConstraints[y];
-        final BitSet blockConstraint = bloConstraints[x/3][y/3];
+        final BitSet rowConstraint = verticalConstraints[x];
+        final BitSet colConstraint = horizontalConstraints[y];
+        final BitSet blockConstraint = blockConstraints[x/3][y/3];
 
         final BitSet mask = new BitSet(10);
         mask.or(rowConstraint);

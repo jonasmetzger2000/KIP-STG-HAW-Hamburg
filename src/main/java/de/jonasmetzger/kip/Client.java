@@ -14,10 +14,12 @@ public class Client {
 
     public static void main(String[] args) {
         String puzzle = load("sodoku2.txt");
-        AStarSudokuSolver solver = new AStarSudokuSolver(BoardArray.from(puzzle)) {
+        final BoardArray from = BoardArray.from(puzzle);
+        AStarSudokuSolver solver = new AStarSudokuSolver(from) {
             @Override
             protected int heuristic(BoardArray board, int x, int y, List<Integer> possibleNums) {
-                return possibleNums.size();
+                if (board.solved()) return -1;
+                return (possibleNums.size()-1)*board.countSetFields();
             }
         };
 
@@ -25,7 +27,7 @@ public class Client {
         System.out.println(solved);
     }
 
-    static BoardArray setBoard() {
+    public static BoardArray setBoard() {
         BoardArray board = new BoardArray();
 
         board.set(6, 0, 0);
@@ -120,7 +122,7 @@ public class Client {
         return board;
     }
 
-    static String load(String str) {
+    public static String load(String str) {
         try {
             return Files.readString(Path.of(Objects.requireNonNull(Client.class.getResource("/" + str)).toURI()));
         } catch (IOException | URISyntaxException e) {

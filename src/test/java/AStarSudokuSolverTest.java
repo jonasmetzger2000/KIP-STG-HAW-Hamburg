@@ -1,6 +1,6 @@
-import de.jonasmetzger.kip.Client;
-import de.jonasmetzger.kip.solver.SimpleAStarSodokuSolver;
-import de.jonasmetzger.kip.sudoku.BoardArray;
+import de.jonasmetzger.kip1.Client;
+import de.jonasmetzger.kip1.solver.SimpleAStarSodokuSolver;
+import de.jonasmetzger.kip1.sudoku.BoardArray;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

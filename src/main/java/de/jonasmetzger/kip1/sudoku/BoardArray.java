@@ -1,4 +1,4 @@
-package de.jonasmetzger.kip.sudoku;
+package de.jonasmetzger.kip1.sudoku;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,7 +1,7 @@
-package de.jonasmetzger.kip;
+package de.jonasmetzger.kip1;
 
-import de.jonasmetzger.kip.solver.AStarSudokuSolver;
-import de.jonasmetzger.kip.sudoku.BoardArray;
+import de.jonasmetzger.kip1.solver.AStarSudokuSolver;
+import de.jonasmetzger.kip1.sudoku.BoardArray;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

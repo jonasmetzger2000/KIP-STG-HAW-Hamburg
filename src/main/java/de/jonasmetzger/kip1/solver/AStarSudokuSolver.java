@@ -1,6 +1,6 @@
-package de.jonasmetzger.kip.solver;
+package de.jonasmetzger.kip1.solver;
 
-import de.jonasmetzger.kip.sudoku.BoardArray;
+import de.jonasmetzger.kip1.sudoku.BoardArray;
 
 import java.util.*;
 

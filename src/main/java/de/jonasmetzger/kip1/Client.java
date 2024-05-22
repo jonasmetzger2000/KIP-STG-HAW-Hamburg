@@ -13,7 +13,7 @@ import java.util.Objects;
 public class Client {
 
     public static void main(String[] args) {
-        String puzzle = load("old/sodoku2.txt");
+        String puzzle = load("easy");
         final BoardArray from = BoardArray.from(puzzle);
         AStarSudokuSolver solver = new AStarSudokuSolver(from) {
             @Override

@@ -19,7 +19,7 @@ public abstract class AStarSudokuSolver {
             final Map<Integer, BoardArray> nextBoards = nextMoves(board);
             boards.addAll(nextBoards.entrySet());
         }
-        return Objects.requireNonNull(boards.poll()).getValue();
+        return Objects.requireNonNull(boards.poll(), "Cant be solved using this algorithm").getValue();
     }
 
     protected Map<Integer, BoardArray> nextMoves(BoardArray board) {

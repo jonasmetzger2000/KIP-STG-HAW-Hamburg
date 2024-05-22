@@ -10,9 +10,10 @@ import de.jonasmetzger.kip2.sudoku.Sudoku;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class GeneticAlgorithm {
 
-    private static final int POPULATION_SIZE = 1000;
+    private static final int POPULATION_SIZE = 100;
 
     private final List<EvolutionSudoku> victoriousPopulation = new ArrayList<>();
     private final Sudoku initialBoard = Sudoku.from(Utils.load("sodoku3.txt"));
@@ -30,9 +31,11 @@ public class GeneticAlgorithm {
 
         while (victoriousPopulation.isEmpty()) {
             // Berechnung der Fitness
+            int totalFitness = 0;
             for (EvolutionSudoku evolutionSudoku : population) {
                 evolutionSudoku.setRound(round);
                 final int fitness = Fitness.conflictsWithinSudoku(evolutionSudoku.getSudoku());
+                totalFitness += fitness;
                 if (fitness == 0) victoriousPopulation.add(evolutionSudoku);
                 evolutionSudoku.setFitness(fitness);
             }

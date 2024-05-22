@@ -1,7 +1,6 @@
 package de.jonasmetzger.kip2.genetic.modules;
 
 import de.jonasmetzger.kip2.genetic.EvolutionSudoku;
-import de.jonasmetzger.kip2.random.RandomHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,22 +25,6 @@ public class Selection {
             winners.add(winner);
         }
         Collections.shuffle(winners);
-        return winners;
-    }
-
-    public static List<EvolutionSudoku> rouletteWheelSelection(List<EvolutionSudoku> population) {
-        final List<EvolutionSudoku> winners = new ArrayList<>();
-        double populationFitness = 0;
-        double populationThreshold = RandomHelper.randomFloatingPoint();
-        for (EvolutionSudoku genom : population) {
-            populationFitness += genom.getFitness();
-        }
-        for (EvolutionSudoku genom : population) {
-            double fitness = genom.getFitness() / populationFitness;
-            if (fitness > populationThreshold) {
-                winners.add(genom);
-            }
-        }
         return winners;
     }
 }

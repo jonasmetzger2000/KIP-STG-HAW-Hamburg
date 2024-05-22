@@ -17,6 +17,21 @@ public class Sudoku {
         this.blocks = SudokuHelper.initBlocks(columns);
     }
 
+    private Sudoku(Cell[] oldCells) {
+        Cell[] clonedCells = new Cell[oldCells.length];
+        for (int i = 0; i < oldCells.length; i++) {
+            clonedCells[i] = oldCells[i].clone();
+        }
+        this.cells = clonedCells;
+        this.columns = SudokuHelper.initColumns(this.cells);
+        this.rows = SudokuHelper.initRows(this.cells);
+        this.blocks = SudokuHelper.initBlocks(this.columns);
+    }
+
+    public Cell getCell(int x, int y) {
+        return columns[x].getCells().get(y);
+    }
+
     /**
      * Erstellt ein neues Sodoku Feld, Felder die so gesetzt werden, können nicht geändert werden
      * @param sudokuString
@@ -37,6 +52,11 @@ public class Sudoku {
             }
         }
         return sudoku;
+    }
+
+    @Override
+    public Sudoku clone() {
+        return new Sudoku(this.cells);
     }
 
     @Override

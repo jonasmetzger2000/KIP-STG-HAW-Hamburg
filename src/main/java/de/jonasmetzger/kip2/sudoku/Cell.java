@@ -3,6 +3,8 @@ package de.jonasmetzger.kip2.sudoku;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Objects;
+
 @Getter
 @RequiredArgsConstructor
 public class Cell {
@@ -17,6 +19,10 @@ public class Cell {
         this.value = value;
     }
 
+    protected Cell clone() {
+        return new Cell(mutable, value);
+    }
+
     public boolean isSet() {
         return value != 0;
     }
@@ -24,6 +30,19 @@ public class Cell {
     public void set(int value) {
         if (!mutable) throw new IllegalStateException();
         this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Cell cell = (Cell) o;
+        return value == cell.value;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(value);
     }
 
     protected void setMutable(boolean mutable) {

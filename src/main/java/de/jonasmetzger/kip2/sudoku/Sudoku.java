@@ -32,6 +32,10 @@ public class Sudoku {
         return columns[x].getCells().get(y);
     }
 
+    public Cell getCell(int i) {
+        return cells[i];
+    }
+
     /**
      * Erstellt ein neues Sodoku Feld, Felder die so gesetzt werden, können nicht geändert werden
      * @param sudokuString

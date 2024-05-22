@@ -11,7 +11,7 @@ class AStarSudokuSolverTest {
     @Test
     void shouldNotSolveImpossibleSodoku() {
         assertThrows(RuntimeException.class, () -> {
-            new SimpleAStarSodokuSolver(BoardArray.from(Client.load("sodoku1.txt"))).solve().toString();
+            new SimpleAStarSodokuSolver(BoardArray.from(Client.load("unsolveable.txt"))).solve().toString();
         });
     }
 

@@ -1,6 +1,7 @@
 package de.jonasmetzger.kip2.random;
 
 import de.jonasmetzger.kip2.genetic.EvolutionSudoku;
+import de.jonasmetzger.kip2.sudoku.Column;
 import de.jonasmetzger.kip2.sudoku.Sudoku;
 
 import java.util.ArrayList;
@@ -18,8 +19,20 @@ public class RandomHelper {
         return randomizedInts;
     }
 
+    public static <T> T getOneFromList(List<T> list) {
+        return list.get(random.nextInt(list.size()));
+    }
+
     public static int getSingleNumber() {
         return random.nextInt(9)+1;
+    }
+
+    public static double randomFloatingPoint() {
+        return random.nextDouble();
+    }
+
+    public static Column getRandomColumn(Sudoku sudoku) {
+        return sudoku.getColumns()[random.nextInt(sudoku.getColumns().length)];
     }
 
     public static Sudoku getFromList(List<Sudoku> sudokuList) {

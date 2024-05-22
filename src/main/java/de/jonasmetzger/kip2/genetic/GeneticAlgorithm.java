@@ -12,10 +12,10 @@ import java.util.List;
 
 public class GeneticAlgorithm {
 
-    private static final int POPULATION_SIZE = 5000;
+    private static final int POPULATION_SIZE = 1000;
 
-    private final List<Sudoku> victoriousPopulation = new ArrayList<>();
-    private final Sudoku initialBoard = Sudoku.from(Utils.load("sodoku4.txt"));
+    private final List<EvolutionSudoku> victoriousPopulation = new ArrayList<>();
+    private final Sudoku initialBoard = Sudoku.from(Utils.load("sodoku3.txt"));
 
     private List<EvolutionSudoku> population = new ArrayList<>(POPULATION_SIZE);
     private int round = 1;
@@ -33,26 +33,28 @@ public class GeneticAlgorithm {
             for (EvolutionSudoku evolutionSudoku : population) {
                 evolutionSudoku.setRound(round);
                 final int fitness = Fitness.conflictsWithinSudoku(evolutionSudoku.getSudoku());
-                if (fitness == 0) victoriousPopulation.add(evolutionSudoku.getSudoku());
+                if (fitness == 0) victoriousPopulation.add(evolutionSudoku);
                 evolutionSudoku.setFitness(fitness);
             }
 
             round++;
             // Printing Information
-            if (round % 100000 == 0) {
+            if (round % 1000 == 0) {
                 population.sort(EvolutionSudoku::compareTo);
                 System.out.println(population.getFirst());
             }
 
             // Selektion
-            population = Selection.tournamentSelection(population);
+            List<EvolutionSudoku> selectedInviduals = Selection.tournamentSelection(population);
 
             // Recombination
-            population = Recombination.columnFromParentOneOrTwo(initialBoard, population, 0.8d, 0.2d);
+            population = Recombination.columnFromParentOneOrTwo(initialBoard, selectedInviduals, 0.8d, 0.2d, POPULATION_SIZE);
 
             // Mutation
             Mutations.mutateFields(population, 5);
         }
+        System.out.println("###############");
+        System.out.println(victoriousPopulation.getFirst());
     }
 
 }

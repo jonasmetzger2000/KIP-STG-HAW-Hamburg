@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 public class EvolutionSudoku implements Comparable<EvolutionSudoku> {
     private int round;
-    private int fitness;
+    private double fitness;
     private Sudoku sudoku;
 
     @Override
@@ -29,6 +29,6 @@ public class EvolutionSudoku implements Comparable<EvolutionSudoku> {
 
     @Override
     public String toString() {
-        return String.format("Round: %d%nFitness: %d%n%s---%n", round, fitness, sudoku);
+        return String.format("Round: %d%nFitness: %s%n%s---%n", round, fitness, sudoku);
     }
 }

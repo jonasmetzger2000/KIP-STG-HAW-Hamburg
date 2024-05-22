@@ -11,14 +11,14 @@ class AStarSudokuSolverTest {
     @Test
     void shouldNotSolveImpossibleSodoku() {
         assertThrows(RuntimeException.class, () -> {
-            new SimpleAStarSodokuSolver(BoardArray.from(Client.load("unsolveable.txt"))).solve().toString();
+            new SimpleAStarSodokuSolver(BoardArray.from(Client.load("old/unsolveable.txt"))).solve().toString();
         });
     }
 
     @Test
     void solveSimpleSudoku() {
         final String expected = Client.load("sodoku2.solved.txt");
-        final String actual = new SimpleAStarSodokuSolver(BoardArray.from(Client.load("sodoku2.txt"))).solve().toString();
+        final String actual = new SimpleAStarSodokuSolver(BoardArray.from(Client.load("old/sodoku2.txt"))).solve().toString();
 
         assertEquals(expected, actual);
     }

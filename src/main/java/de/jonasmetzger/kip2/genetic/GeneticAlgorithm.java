@@ -16,7 +16,7 @@ public class GeneticAlgorithm {
     private static final int POPULATION_SIZE = 100;
 
     private final List<EvolutionSudoku> victoriousPopulation = new ArrayList<>();
-    private final Sudoku initialBoard = Sudoku.from(Utils.load("sodoku3.txt"));
+    private final Sudoku initialBoard = Sudoku.from(Utils.load("easy"));
 
     private List<EvolutionSudoku> population = new ArrayList<>(POPULATION_SIZE);
     private int round = 1;

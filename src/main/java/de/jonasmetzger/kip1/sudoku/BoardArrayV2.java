@@ -55,7 +55,7 @@ public class BoardArrayV2 {
     }
 
     public static void main(String[] args) {
-        BoardArrayV2 board = new BoardArrayV2(load("sodoku2.txt"));
+        BoardArrayV2 board = new BoardArrayV2(load("old/sodoku2.txt"));
 
         System.out.println(board.errors);
 
